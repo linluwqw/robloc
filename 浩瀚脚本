@@ -1,172 +1,180 @@
-local UserInputService = game:GetService("UserInputService")
-
-local function CreateGUI(title)
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "MyGUI"
-    gui.ResetOnSpawn = false
-    gui.DisplayOrder = 10
-    gui.Parent = game.Players.LocalPlayer.PlayerGui
-    local frame = Instance.new("Frame")
-    frame.Name = "MainFrame"
-    frame.BackgroundTransparency = 0
-    frame.BackgroundColor3 = Color3.fromRGB(240, 248, 255)
-    frame.BorderSizePixel = 0
-    frame.Position = UDim2.new(0, 110, 0, -20) 
-    frame.Size = UDim2.new(0, 500, 0, 280)
-    frame.Parent = gui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = frame
-
-    local dragging = false
-    local startPos, startOffset
-
-    frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            startPos = input.Position
-            startOffset = frame.Position
-            gui.Active = true 
-        end
-    end)
-
-    frame.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-            startPos = nil
-            startOffset = nil
-            gui.Active = false
-        end
-    end)
-
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - startPos
-            frame.Position = UDim2.new(startOffset.X.Scale, startOffset.X.Offset + delta.X, startOffset.Y.Scale,  
-                startOffset.Y.Offset + delta.Y)
-        end
-    end)
-    local titleLabel = Instance.new("TextLabel")
-    titleLabel.Name = "TitleLabel"
-    titleLabel.Size = UDim2.new(1, 0, 0.05, 0.15 * frame.Size.Y.Offset)
-    titleLabel.Position = UDim2.new(0, 0, 0.01, 0)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = title
-    titleLabel.TextColor3 = Color3.new(0, 0, 0)
-    titleLabel.TextSize = math.floor(frame.Size.Y.Offset * 0.1)
-    titleLabel.Parent = frame
-    local disagreeButton = Instance.new("TextButton")
-    disagreeButton.Name = "DisagreeButton"
-    disagreeButton.Size = UDim2.new(0, 0.4 * frame.Size.X.Offset, 0, 0.15 * frame.Size.Y.Offset)
-    disagreeButton.Position = UDim2.new(0, 0.1 * frame.Size.X.Offset, 0,
-        frame.Size.Y.Offset - 0.25 * frame.Size.Y.Offset)
-    disagreeButton.BackgroundTransparency = 0
-    disagreeButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-    disagreeButton.Text = "楦″退出"
-    disagreeButton.TextColor3 = Color3.new(0, 0, 0)
-    disagreeButton.TextSize = math.floor(frame.Size.Y.Offset * 0.08)
-    disagreeButton.Font = Enum.Font.SourceSans
-    disagreeButton.Parent = frame
-    local disagreeCorner = Instance.new("UICorner")
-    disagreeCorner.CornerRadius = UDim.new(0, 10)
-    disagreeCorner.Parent = disagreeButton
-
-    local agreeButton = Instance.new("TextButton")
-    agreeButton.Name = "AgreeButton"
-    agreeButton.Size = UDim2.new(0, 0.4 * frame.Size.X.Offset, 0, 0.15 * frame.Size.Y.Offset)
-    agreeButton.Position = UDim2.new(0, frame.Size.X.Offset - 0.5 * frame.Size.X.Offset, 0,
-        frame.Size.Y.Offset - 0.25 * frame.Size.Y.Offset)
-    agreeButton.BackgroundTransparency = 0
-    agreeButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
-    agreeButton.Text = "楦″继续"
-    agreeButton.TextColor3 = Color3.new(0, 0, 0)
-    agreeButton.TextSize = math.floor(frame.Size.Y.Offset * 0.08)
-    agreeButton.Font = Enum.Font.SourceSans 
-    agreeButton.Parent = frame
-
-    
-    local agreeFrame = Instance.new("TextLabel")
-    agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
-    agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
-    agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.好脚本.\n 2.精品脚本.\n 3.肥美脚本."
-    agreeFrame.TextWrapped = true
-
-    
-    agreeFrame.TextSize = 16  
+local Window = Rayfield:CreateWindow({
+    Name = "𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | 炫黑界面",
+    LoadingTitle = "正在加载脚本中心...",
+    LoadingSubtitle = "请稍候片刻",
+    Theme = "Dark",
+    Icon = "rbxassetid://0",
+    ToggleUIKeybind = "RightControl",
+    ConfigurationSaving = {
+        Enabled = false,
+        FolderName = "ScriptHub",
+        FileName = "Config"
+    }
+})
 
 
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = agreeFrame
+local MainTab = Window:CreateTab("🏠 主页面", "house")
+local ScriptsTab = Window:CreateTab("⚙️ 脚本库", "settings")
+local SettingsTab = Window:CreateTab("🔧 设置", "tool")
 
-    agreeFrame.Parent = frame
 
-    local agreeCorner = Instance.new("UICorner")
-    agreeCorner.CornerRadius = UDim.new(0, 10)
-    agreeCorner.Parent = agreeButton
-    local minimizeButton = Instance.new("TextButton")
-    minimizeButton.Name = "MinimizeButton"
-    minimizeButton.Size = UDim2.new(0, 40, 0, 40)
-    minimizeButton.Position = UDim2.new(1, -65, 0, 10)
-    minimizeButton.BackgroundTransparency = 0
-    minimizeButton.BackgroundColor3 = Color3.fromRGB(199, 199, 199)
-    minimizeButton.Text = "-"
-    minimizeButton.TextSize = 28  
-    minimizeButton.TextColor3 = Color3.new(0, 0, 0)
-    minimizeButton.Font = Enum.Font.SourceSans
-    minimizeButton.Parent = frame
+MainTab:CreateSection("欢迎使用脚本中心")
 
-    local isMinimized = false
+MainTab:CreateParagraph({
+    Title = "脚本加载器",
+    Content = "这是一个炫黑风格的脚本加载界面，提供多种游戏脚本一键加载功能。请选择左侧标签页中的脚本并点击加载。"
+})
 
-    local minimizeCorner = Instance.new("UICorner")
-    minimizeCorner.CornerRadius = UDim.new(0, 5)
-    minimizeCorner.Parent = minimizeButton
+MainTab:CreateSection("使用指南")
 
-    minimizeButton.MouseButton1Click:Connect(function()
-        if isMinimized then
-            frame.Size = UDim2.new(0, 500, 0, 280)
-            titleLabel.Position = UDim2.new(0, 0, 0.01, 0)
-            minimizeButton.Text = "-"
-            minimizeButton.TextSize = 28
-            isMinimized = false
-            disagreeButton.Visible = true
-            agreeButton.Visible = true
-            agreeFrame.Visible = true
-        else
-            frame.Size = UDim2.new(0, 500, 0, 60)
-            titleLabel.Position = UDim2.new(0, 0, 0, 0)
-            minimizeButton.Text = "+"
-            minimizeButton.TextSize = 28 
-            isMinimized = true
-            disagreeButton.Visible = false
-            agreeButton.Visible = false
-            agreeFrame.Visible = false
-        end
-    end)
+local Keybind = MainTab:CreateKeybind({
+    Name = "界面显示/隐藏快捷键",
+    CurrentKeybind = "RightControl",
+    HoldToInteract = false,
+    Callback = function(Keybind)
+        Window:ChangeToggleKeybind(Keybind)
+    end,
+})
 
-    local function AnimateExit()
-        local duration = 1
-        local startTime = tick()
-        local initialSize = frame.Size
-        while (tick() - startTime) < duration do
-            local elapsedTime = tick() - startTime
-            local scale = 1 - elapsedTime / duration
-            frame.Size = UDim2.new(initialSize.X.Scale * scale, initialSize.X.Offset * scale,
-                initialSize.Y.Scale * scale, initialSize.Y.Offset * scale)
-            frame.Position = frame.Position + UDim2.new((1 - scale) / 2, 0, (1 - scale) / 2, 0)
-            wait()
-        end
-        gui:Destroy()
+MainTab:CreateButton({
+    Name = "刷新界面",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "界面已刷新",
+            Content = "所有组件已重新加载",
+            Duration = 3,
+            Image = 1060112305
+        })
     end
-    disagreeButton.MouseButton1Click:Connect(function()
-        AnimateExit()
-    end)
-    agreeButton.MouseButton1Click:Connect(function()
-        AnimateExit()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/Asddffgujhh/-/refs/heads/main/BBBBBSSSSS'))()
-  end)
-end
-local myTitle = "浩瀚中心" 
-CreateGUI(myTitle)
+})
+
+
+ScriptsTab:CreateSection("常用脚本")
+
+ScriptsTab:CreateButton({
+    Name = "🛩️ 飞行脚本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyScript/main/FlyScriptV3"))()
+        Rayfield:Notify({
+            Title = "飞行脚本已加载",
+            Content = "按E键激活飞行功能",
+            Duration = 5,
+            Image = 1060112305
+        })
+    end
+})
+
+ScriptsTab:CreateButton({
+    Name = "⚡ 速度脚本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/SpeedScript/main/SpeedScript"))()
+        Rayfield:Notify({
+            Title = "速度脚本已加载",
+            Content = "使用方向键移动，速度已提升",
+            Duration = 5,
+            Image = 1060112305
+        })
+    end
+})
+
+ScriptsTab:CreateSection("游戏专用")
+
+ScriptsTab:CreateButton({
+    Name = "🎮 通用脚本合集",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/gycgchgyfytdttr/shenqin/main/99day.lua"))()
+        Rayfield:Notify({
+            Title = "通用脚本已加载",
+            Content = "功能菜单已打开，请查看界面",
+            Duration = 5,
+            Image = 1060112305
+        })
+    end
+})
+
+ScriptsTab:CreateButton({
+    Name = "🧠 红脑脚本",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
+        Rayfield:Notify({
+            Title = "红脑脚本已加载",
+            Content = "功能已激活，请查看界面",
+            Duration = 5,
+            Image = 1060112305
+        })
+    end
+})
+
+ScriptsTab:CreateDropdown({
+    Name = "选择游戏",
+    Options = {"通用", "Brookhaven", "Arsenal", "Doors", "Pet Simulator X"},
+    CurrentOption = "通用",
+    Callback = function(Option)
+        Rayfield:Notify({
+            Title = "游戏模式已切换",
+            Content = "当前选择: " .. Option,
+            Duration = 3,
+            Image = 1060112305
+        })
+    end
+})
+
+
+SettingsTab:CreateSection("界面设置")
+
+SettingsTab:CreateToggle({
+    Name = "显示界面水印",
+    CurrentValue = true,
+    Callback = function(Value)
+        Window:SetWatermark(Value and "𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | v1.0.0" or "")
+    end
+})
+
+SettingsTab:CreateToggle({
+    Name = "启用快捷键提示",
+    CurrentValue = true,
+    Callback = function(Value)
+        Window:SetWatermarkVisibility(Value)
+    end
+})
+
+SettingsTab:CreateSlider({
+    Name = "界面透明度",
+    Range = {0, 100},
+    Increment = 5,
+    Suffix = "%",
+    CurrentValue = 80,
+    Callback = function(Value)
+        Window:SetOpacity(Value / 100)
+    end
+})
+
+SettingsTab:CreateSection("个性化")
+
+local ColorPicker = SettingsTab:CreateColorPicker({
+    Name = "主题颜色",
+    Color = Color3.fromRGB(0, 255, 255),
+    Callback = function(Value)
+        Window:ChangeThemeColor(Value)
+    end
+})
+
+SettingsTab:CreateInput({
+    Name = "自定义用户名",
+    PlaceholderText = "输入你的用户名",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        if Text ~= "" then
+            Window:SetWatermark("𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | " .. Text)
+        end
+    end
+})
+
+
+Rayfield:Notify({
+    Title = "脚本中心已就绪",
+    Content = "欢迎使用炫黑界面脚本加载器",
+    Duration = 6,
+    Image = 1060112305
+})
+```
