@@ -1,9 +1,12 @@
+-- 首先加载Rayfield库
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 local Window = Rayfield:CreateWindow({
     Name = "𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | 炫黑界面",
     LoadingTitle = "正在加载脚本中心...",
     LoadingSubtitle = "请稍候片刻",
     Theme = "Dark",
-    Icon = "rbxassetid://0",
+    Icon = "rbxassetid://4483345998", -- 使用有效的图标ID
     ToggleUIKeybind = "RightControl",
     ConfigurationSaving = {
         Enabled = false,
@@ -12,11 +15,9 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
-
 local MainTab = Window:CreateTab("🏠 主页面", "house")
 local ScriptsTab = Window:CreateTab("⚙️ 脚本库", "settings")
 local SettingsTab = Window:CreateTab("🔧 设置", "tool")
-
 
 MainTab:CreateSection("欢迎使用脚本中心")
 
@@ -47,7 +48,6 @@ MainTab:CreateButton({
         })
     end
 })
-
 
 ScriptsTab:CreateSection("常用脚本")
 
@@ -119,14 +119,17 @@ ScriptsTab:CreateDropdown({
     end
 })
 
-
 SettingsTab:CreateSection("界面设置")
 
 SettingsTab:CreateToggle({
     Name = "显示界面水印",
     CurrentValue = true,
     Callback = function(Value)
-        Window:SetWatermark(Value and "𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | v1.0.0" or "")
+        if Value then
+            Rayfield:SetWatermark("𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | v1.0.0")
+        else
+            Rayfield:SetWatermark("")
+        end
     end
 })
 
@@ -134,7 +137,7 @@ SettingsTab:CreateToggle({
     Name = "启用快捷键提示",
     CurrentValue = true,
     Callback = function(Value)
-        Window:SetWatermarkVisibility(Value)
+        Rayfield:SetWatermarkVisibility(Value)
     end
 })
 
@@ -145,7 +148,7 @@ SettingsTab:CreateSlider({
     Suffix = "%",
     CurrentValue = 80,
     Callback = function(Value)
-        Window:SetOpacity(Value / 100)
+        Rayfield:SetInterfaceTransparency(Value / 100)
     end
 })
 
@@ -155,7 +158,7 @@ local ColorPicker = SettingsTab:CreateColorPicker({
     Name = "主题颜色",
     Color = Color3.fromRGB(0, 255, 255),
     Callback = function(Value)
-        Window:ChangeThemeColor(Value)
+        Rayfield:ChangeThemeColor(Value)
     end
 })
 
@@ -165,11 +168,10 @@ SettingsTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Callback = function(Text)
         if Text ~= "" then
-            Window:SetWatermark("𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | " .. Text)
+            Rayfield:SetWatermark("𝗦𝗖𝗥𝗜𝗣𝗧 𝗛𝗨𝗕 | " .. Text)
         end
     end
 })
-
 
 Rayfield:Notify({
     Title = "脚本中心已就绪",
@@ -177,4 +179,3 @@ Rayfield:Notify({
     Duration = 6,
     Image = 1060112305
 })
-```
